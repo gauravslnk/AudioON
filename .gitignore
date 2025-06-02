@@ -1,0 +1,6 @@
+# Ignore build directories and binaries
+bin/
+obj/
+*.exe
+*.dll
+*.depend
