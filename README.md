@@ -1,10 +1,12 @@
 ![AudioON Logo](https://github.com/gauravslnk/AudioON/blob/main/resources/ico/AudioON.png)
 
-# **AudioON** 🎵
+# **AudioON** – Console-Based Music Player 🎵
 
-**AudioON** is a lightweight **terminal-based music player** built in C++ using the **Windows Multimedia API**.
+AudioON is a lightweight, **terminal-based music player** written in C++ designed primarily for **Windows**, with experimental support for Linux. It provides a simple menu-driven interface to play `.wav` audio files from a predefined folder. Built using native multimedia libraries, it aims for fast, real-time playback directly from the terminal.
 
-Designed for simplicity and speed, it allows you to play `.wav` audio files directly from your terminal with a smooth and interactive experience.
+AudioON is built for users who want a quick and minimalistic way to play `.wav` files without the overhead of a full GUI music player. It uses the **Windows Multimedia API (`winmm.lib`)** on Windows to handle sound playback asynchronously, allowing users to select tracks from a list and control playback in real-time.
+
+While Windows support is mature and stable, Linux support is experimental, relying on external command-line players such as `aplay` to play audio files.
 
 ---
 
@@ -14,7 +16,6 @@ Designed for simplicity and speed, it allows you to play `.wav` audio files dire
 - 🔊 Real-time playback of `.wav` audio files.
 - 🔁 Loop support until the user stops the song.
 - 🧠 Async non-blocking audio playback.
-- 🚪 Graceful exit options from anywhere in the menu.
 - ➕ Add new songs by placing `.wav` files in `resources/sounds/`.
 - 💻 **Cross-platform** (Windows ✅ | Linux 🐧 — support growing!)
 
@@ -23,18 +24,21 @@ Designed for simplicity and speed, it allows you to play `.wav` audio files dire
 ## 📁 File Structure
 
 ```
-
 AudioON/
-├── AudioON.exe
+├── AudioON.exe               # Compiled executable (Windows)
 ├── include/
-│   ├── AudioON.h        // Class declarations for sound playback
-│   └── AudioHelper.h    // Helper functions for directory & file handling
+│   ├── AudioON.h            # Class declarations for sound playback
+│   └── AudioHelper.h        # Helper functions for directory & file handling
 ├── src/
-│   ├── main.cpp         // Program entry, menu, user input handling
-│   ├── AudioON.cpp      // AudioON class implementation (PlaySound etc.)
-│   └── AudioHelper.cpp  // Directory traversal and file searching
+│   ├── main.cpp             # Entry point, user interaction, menu
+│   ├── AudioON.cpp          # AudioON class implementation
+│   └── AudioHelper.cpp      # Directory traversal and audio file loading
 ├── resources/
-│   └── sounds/          // Your .wav audio files go here
+│   ├── sounds/              # Place your .wav files here
+│   └── ico/
+│       ├── appicon.ico      # Icon file (Windows)
+│       ├── appicon.rc       # Resource script
+│       └── appicon.res      # Compiled resource file
 └── README.md
 
 ````
@@ -45,7 +49,6 @@ AudioON/
 
 You can **either build from source** or directly use the precompiled installer (Windows only).
 
----
 
 ### ✅ Option 1: Windows Installer (Recommended)
 
@@ -55,30 +58,26 @@ You can **either build from source** or directly use the precompiled installer (
 4. Launch `AudioON` from the installed location.
 5. Place your `.wav` files in the `resources/sounds/` folder.
 
-> ℹ️ The installer will be uploaded under the **Releases** tab.
-
 ---
 
 ### 🛠️ Option 2: Build from Source (Windows & Linux)
 
 Whether you're on **Windows** or a **Linux terminal warrior**, AudioON is ready for you!
 
----
+## ⚙️ Platform Details & Libraries Used
 
-#### 🪟 Windows
+### Windows
 
-##### Requirements
+- Uses **Windows Multimedia API (`winmm.lib`)** for audio playback.
+- Playback uses `PlaySound` function for asynchronous sound playing.
+- Linking requires `-lwinmm` during compilation.
+- Supports `.wav` files natively.
+- Icon embedding via `.rc` and `.res` resource files.
+- Recommended build command (MinGW):
 
-* Windows OS
-* C++ compiler (like `g++`, `MSVC`)
-* WinMM library (usually included by default in Windows)
-
-##### Build & Run (MinGW Example)
-
-```bash
-g++ src/*.cpp -o AudioON.exe -lwinmm
-./AudioON.exe
-```
+  ```bash
+  g++ src/*.cpp -Iinclude -o AudioON.exe -lwinmm
+  ./AudioON.exe ```
 
 Make sure your `.wav` files are placed inside the `resources/sounds/` directory.
 
@@ -89,20 +88,43 @@ Make sure your `.wav` files are placed inside the `resources/sounds/` directory.
 Yes, it works on Linux too!
 For playback, it uses external tools like `aplay` to play `.wav` files.
 
-##### Requirements
+- AudioON attempts Linux compatibility.
 
-* Linux OS
-* C++ compiler (`g++`)
-* `aplay` installed (or any terminal-based `.wav` player)
+- Does not use native audio libraries directly.
+
+- Uses external tools like `aplay` (from alsa-utils) for playing `.wav` files via system calls.
+
+- Requires aplay to be installed `(sudo apt-get install alsa-utils or equivalent)`.
+
+- No embedded icon support on Linux.
+
 
 ##### Build & Run
 
 ```bash
-g++ src/*.cpp -o AudioON -std=c++17
+g++ src/*.cpp -Iinclude -o AudioON -std=c++17
 ./AudioON
 ```
 
 Make sure your `.wav` files are inside the `resources/sounds/` directory.
+
+---
+
+## ❗ Known Issues & Limitations
+
+- **Play/Pause Functionality:** Currently, pause and resume controls do not work as expected. When pausing and resuming, playback restarts the song from the beginning rather than continuing from the pause point.
+
+- **Loop Mode:** Looping works but can sometimes cause brief audio glitches or restart delays depending on the platform. Also, the player stops after one song, so you have to manually press `N` (next song) and `P` (play/pause) to continue listening.
+
+- **Linux Support:** Linux support is minimal and depends heavily on external utilities. Advanced features like pause, stop, or loop might not work properly.
+
+- **File Format:** Only supports `.wav` files. Other audio formats are not supported.
+
+- **UI:** Being terminal-based, the interface is minimalistic and lacks advanced controls like volume adjustment or playlists.
+
+- **Cross-Platform Differences:** Some features (like icon embedding and asynchronous playback) are Windows-only or behave differently across operating systems.
+
+---
 
 > 🧪 *Linux friends!* If anything breaks, feel free to open an [issue](https://github.com/gauravslnk/AudioON/issues).
 > Bonus points if you help fix it and earn eternal respect from fellow devs 😄
@@ -142,3 +164,6 @@ Built with ❤️ by **Gaurav Solanki**
 * 📧 [gauravsolanki443@gmail.com](mailto:gauravsolanki443@gmail.com)
 
 ---
+Thank you for checking out AudioON!
+Happy listening 🎶
+
