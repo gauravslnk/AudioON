@@ -90,7 +90,6 @@ int main() {
                     isRunning = false;
                     break;
             }
-
             if (isRunning) {
                 audioPlayer.displayMenu(audioPlayer.getCurrentTrackIndex(), audioPlayer.getIsPaused());
             }

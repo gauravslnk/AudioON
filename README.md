@@ -166,3 +166,7 @@ Built with ❤️ by **Gaurav Solanki**
 ---
 Thank you for checking out AudioON!
 Happy listening 🎶
+<<<<<<< HEAD
+=======
+
+>>>>>>> ec03d2e749b82544ff01c0e2d536df697a49f0dd
